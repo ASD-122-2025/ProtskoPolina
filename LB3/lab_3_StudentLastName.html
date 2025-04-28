@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Звіт з лабораторної роботи №3</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .author {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        code {
+            background-color: #f7f7f7;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .code-block {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .conclusion {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .question {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Звіт з лабораторної роботи №3</h1>
+    
+    <div class="author">
+        Виконала студентка групи КН-24-1 Процко П. П.
+    </div>
+    
+    <p><strong>Тема:</strong> Аналіз складності алгоритмів. Алгоритми сортування</p>
+    <p><strong>Мета:</strong> засвоїти аналіз складності алгоритмів за допомогою алгоритмів сортування методом вставок та бульбашковим методом.</p>
+    
+    <h3>Хід роботи</h3>
+    <ol>
+        <li>Завантажити Python Anaconda та активувати віртуальне середовище, яке було створено під час виконання попередньої лабораторної роботи.</li>
+        <li>Створити новий Notebook-документ <code>lab_3_StudentLastName.ipynb</code> за допомогою Jupyter Notebook.</li>
+    </ol>
+    
+    <h3>Теоретичний аналіз алгоритмів сортування</h3>
+    <ul>
+        <li><strong>Метод вставок:</strong> O(n²) у найгіршому випадку, O(n) у найкращому (відсортований масив).</li>
+        <li><strong>Метод бульбашки:</strong> O(n²) у найгіршому випадку, O(n) у найкращому.</li>
+    </ul>
+    
+    <h3>Реалізація алгоритмів сортування на Python</h3>
+    <div class="code-block">
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        if not swapped:
+            break
+
+def measure_time(sort_func, arr):
+    start_time = time.perf_counter()
+    sort_func(arr.copy())
+    return time.perf_counter() - start_time
+
+# Розміри масивів для тестування
+sizes = [5, 10, 50, 100, 500, 1000, 2000, 3000, 4000, 5000, 10000, 20000, 50000, 100000]
+
+# Логування часів виконання
+insertion_times = []
+bubble_times = []
+
+for size in sizes:
+    arr = np.random.randint(0, 10000, size)
+    insertion_times.append(measure_time(insertion_sort, arr))
+    bubble_times.append(measure_time(bubble_sort, arr))
+
+# Побудова графіка
+plt.figure(figsize=(10, 6))
+plt.plot(sizes, insertion_times, label='Insertion Sort', marker='o')
+plt.plot(sizes, bubble_times, label='Bubble Sort', marker='s')
+plt.xlabel('Розмір масиву n')
+plt.ylabel('Час виконання (секунди)')
+plt.title('Порівняння часу виконання сортувань')
+plt.legend()
+plt.grid(True)
+plt.show()
+    </div>
+    
+    <h3>Графік часу виконання обох алгоритмів сортування</h3>
+    <img src="file:///C:/Users/prots_95hap1/OneDrive/Desktop/АСД/LB3/sorting_graph.png" alt="Графік порівняння часу виконання алгоритмів сортування">
+    <h3>Висновок</h3>
+    <div class="conclusion">
+        <p>У результаті виконання лабораторної роботи були проаналізовані алгоритми сортування методом вставок та бульбашковим методом. Порівняно їх час виконання на різних розмірах масивів. Виявлено, що при великих обсягах даних метод бульбашки має значно більший час виконання, порівняно з методом вставок. Це підтверджує теоретичні висновки про складність алгоритмів.</p>
+    </div>
+    
+    <h3>Відповіді на контрольні питання</h3>
+    <ol>
+        <li>
+            <div class="question">Що таке O-нотація і чим вона відрізняється від Ω-нотації?</div>
+            <ul>
+                <li>O-нотація описує верхню межу зростання часу алгоритму (найгірший випадок).</li>
+                <li>Ω-нотація описує нижню межу зростання часу (найкращий випадок).</li>
+            </ul>
+        </li>
+        <li>
+            <div class="question">Яку часову складність має алгоритм сортування методом вставляння за найсприятливіших умов?</div>
+            <p>При відсортованому масиві алгоритм лише перевіряє елементи, без перестановок.</p>
+            <ul>
+                <li>Кількість порівнянь: O(N).</li>
+                <li>Кількість перестановок: 0.</li>
+                <li>Загальна складність: O(N).</li>
+            </ul>
+        </li>
+        <li>
+            <div class="question">Що таке ефективний алгоритм?</div>
+            <p>Ефективний алгоритм – це алгоритм, який виконує задачу з мінімальними витратами ресурсів (часу та пам'яті).</p>
+        </li>
+        <li>
+            <div class="question">Пояснити поняття головного параметра (розміру) завдання.</div>
+            <p>Головний параметр – це розмір вхідних даних, що впливає на продуктивність алгоритму.</p>
+        </li>
+        <li>
+            <div class="question">Як записати асимптотичну складність F(N) = N³ + 7N² - 14N у O-нотації?</div>
+            <p>O(N³)</p>
+        </li>
+    </ol>
+</body>
+</html>
